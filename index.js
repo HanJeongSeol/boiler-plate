@@ -2,6 +2,9 @@ const express = require("express") // 모듈 불러오기
 const app = express() // 함수 사용해서 새로운 express 생성
 const port = 5000 // 5000번 포트 사용
 const bodyParser = require("body-parser")
+
+const config = require("./config/key")
+
 const { User } = require("./models/User") // DB model 호출
 
 // bodyparser이 클라이언트에서 가져온 정보를 서버에서 분석할 수 있게
@@ -14,7 +17,12 @@ app.use(bodyParser.json())
 
 const mongoose = require("mongoose")
 mongoose
-    .connect({ useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
+    .connect(config.mongoURI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+    })
     .then(() => console.log("MongoDb connexted.."))
     .catch((err) => console.log(err))
 
