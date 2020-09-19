@@ -1,6 +1,8 @@
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const saltRounds = 10
+const jwt = require("jsonwebtoken")
+
 const userSchema = mongoose.Schema({
     name: {
         type: String,
@@ -57,8 +59,46 @@ userSchema.pre("save", function (next) {
                 next()
             })
         })
+    } else {
+        next()
     }
 })
+
+userSchema.methods.comparePassword = function (plainPassword, cb) {
+    // plainPassword 1234567, 암호화된 pwd $12312332483249234928
+    // 두 암호가 같은지 확인해야한다. plainpwd를 암호화해서 db의 암호화 같은지 확인해야한다.
+    bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
+        if (err) return cb(err)
+        cb(null, isMatch)
+    })
+}
+
+userSchema.methods.generateToken = function (cb) {
+    var user = this
+    // jsonwewbtoken을 사용해서 token 생성
+    var token = jwt.sign(user._id.toHexString(), "secret")
+
+    user.token = token
+    user.save(function (err, user) {
+        if (err) return cb(err)
+        cb(null, user)
+    })
+}
+
+userSchema.statics.findByToken = function (token, cb) {
+    var user = this
+
+    // 토큰을 decode하는 과정
+    jwt.verify(token, "secret", function (err, decoded) {
+        // 유저 아이디로 유저를 찾은 후 클라이언트에서 가져온 token과
+        // db에 보관된 토큰이 일치하는지 확인
+
+        user.findOne({ _id: decoded, token: token }, function (err, user) {
+            if (err) return cb(err)
+            cb(null, user)
+        })
+    })
+}
 
 // Schema를 model로 감싸야한다.
 const User = mongoose.model("User", userSchema)
