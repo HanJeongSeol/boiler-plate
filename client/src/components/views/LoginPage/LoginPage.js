@@ -17,6 +17,9 @@ const LoginPage = () => {
     const onSubmitHander = (event) => {
         // preventDefault()를 사용해서 버튼을 클릭했을 때 새로고침되지 않도록 한다.
         event.preventDefault()
+
+        console.log("Email", Email)
+        console.log("Password", Password)
     }
     return (
         <div
