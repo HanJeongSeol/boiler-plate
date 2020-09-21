@@ -5,13 +5,13 @@ import App from "./App"
 import * as serviceWorker from "./serviceWorker"
 import { Provider } from "react-redux"
 import "antd/dist/antd.css"
-import { applyMiddleware } from "redux"
+import { applyMiddleware, createStore } from "redux"
 import promiseMiddleware from "redux-promise"
 import ReduxThunk from "redux-thunk"
 import Reducer from "./_reducers"
 
 // redux는 객체만 받기 때문에 promise와 func 받도록 한다.
-const createStorewithMiddleare = applyMiddleware(promiseMiddleware, ReduxThunk(createStore))
+const createStorewithMiddleare = applyMiddleware(promiseMiddleware, ReduxThunk)(createStore)
 
 ReactDOM.render(
     <Provider

@@ -1,4 +1,6 @@
-import { combineReduxers } from "redux"
+import { combineReducers } from "redux"
+// import user from "./user_reducer"
+
 // import user from "./user_reducer"
 // import comment from "./comment_reducer"
 
@@ -7,7 +9,7 @@ import { combineReduxers } from "redux"
 // state가 user, post 등등 여러가지 존재할 수 있기 때문에
 // combineReduxers를 사용해서 rootReducer에서 하나로 합쳐준다.
 // 우리는 login register를 만들기 때문에 user reducer를 생성한다.
-const rootReducer = combineReduxers({
+const rootReducer = combineReducers({
     // user,
     // comment
 })
