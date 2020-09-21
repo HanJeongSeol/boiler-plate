@@ -4,6 +4,8 @@ const port = 5000 // 5000번 포트 사용
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const config = require("./config/key")
+// cors module를 사용한 cors 이슈 해결
+// const cors = require("cors")
 
 const { auth } = require("./middleware/auth")
 const { User } = require("./Models/User") // DB model 호출
@@ -16,6 +18,16 @@ app.use(bodyParser.urlencoded({ extended: true }))
 //application/json -> json타입 가져옴
 app.use(bodyParser.json())
 app.use(cookieParser())
+
+// cors module를 사용
+// let cors_origin = ["http://localhost:3000"]
+
+// app.use(
+//     cors({
+//         origin: cors_origin, // 연동하려는 주소
+//         credentials: true, // response 헤더 추가
+//     })
+// )
 
 const mongoose = require("mongoose")
 mongoose
