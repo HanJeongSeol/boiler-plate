@@ -27,7 +27,7 @@ const LandingPage = (props) => {
                 justifyContent: "center",
                 alignItems: "center",
                 width: "100%",
-                height: "100%",
+                height: "100vh",
             }}
         >
             <h2>시작페이지</h2>
