@@ -53,7 +53,7 @@ app.post("/api/users/register", (req, res) => {
     //userInfo : 저장된 유저 정보 가짐
     user.save((err, userInfo) => {
         if (err) return res.json({ success: false, err }) // error발생 시 json 형식으로 sucess:false 전달 후 err 메서지도 전달.
-        return res.status(200).json({ success: true }) // status(200)은 성공했다는 뜻, http 200
+        return res.status(200).json({ success: true }) // http 200 : success
     }) // 정보들이 user모델에 저장이 된다.
 })
 
@@ -74,8 +74,8 @@ app.post("/api/users/login", (req, res) => {
             user.generateToken((err, user) => {
                 if (err) return res.status(400).send(err)
 
-                // token을 저장한다. 쿠키, 로컬스토리지 등등
-                res.cookie("x_auth", user.token).status(200).json({ loginsuccess: true, userId: user._id })
+                // token을 저장한다. 쿠키, 로컬스토리지 등등, 클라이언트에 성공 메시지 전달
+                res.cookie("x_auth", user.token).status(200).json({ loginSuccess: true, userId: user._id })
             })
         })
     })
@@ -101,10 +101,11 @@ app.get("/api/users/auth", auth, (req, res) => {
 })
 
 // 로그아웃 하려는 유저를 데이터베이스에서 찾아서 그 유저의 토큰을 삭제한다.
+// get(경로, middleware, req,res)
 // auth에서 클라이언트의 토큰과 db의 토큰과 비교함으로서 인증을 진행했기 때문에
 // db의 토큰을 삭제하면 클라이언트의 쿠키와 다르기 때문에 인증이 안되서 로그인 기능이 풀리게된다.
 app.get("/api/users/logout", auth, (req, res) => {
-    // 유저를 탐색해서 update
+    // 유저를 탐색해서 update. findOneAndUpdate() : db update
     User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
         if (err) return res.json({ success: false, err })
         return res.status(200).send({

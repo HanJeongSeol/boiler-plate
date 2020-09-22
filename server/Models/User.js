@@ -66,7 +66,7 @@ userSchema.pre("save", function (next) {
 
 userSchema.methods.comparePassword = function (plainPassword, cb) {
     // plainPassword 1234567, 암호화된 pwd $12312332483249234928
-    // 두 암호가 같은지 확인해야한다. plainpwd를 암호화해서 db의 암호화 같은지 확인해야한다.
+    // 두 암호가 같은지 확인해야한다. plainpwd를 암호화해서 db의 암호화된 값과 같은지 체크
     bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
         if (err) return cb(err)
         cb(null, isMatch)
