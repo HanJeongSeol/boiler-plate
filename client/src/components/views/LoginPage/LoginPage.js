@@ -1,25 +1,58 @@
-import React, { useState } from "react"
+/*
+    test : dkfzpdls@naver.com
+    testpwd : 12345
 
-const LoginPage = () => {
+
+    tmfbm@naver.com
+    123456
+*/
+
+import React, { useState } from "react"
+import { useDispatch } from "react-redux" // redux 사용하여 state관리
+import { loginUser } from "../../../_actions/user_action"
+import { withRouter } from "react-router-dom"
+
+const LoginPage = (props) => {
+    // function LoginPage(props){
+    const dispatch = useDispatch()
+
     // hook state, default = space
     const [Email, setEmail] = useState("")
     const [Password, setPassword] = useState("")
 
     // email form에 기입할 수 있도록 만들어준다.
-    const onEmailHander = (event) => {
+    const onEmailHandler = (event) => {
         setEmail(event.currentTarget.value)
     }
 
-    const onPasswordHander = (event) => {
+    const onPasswordHandler = (event) => {
         setPassword(event.currentTarget.value)
     }
 
-    const onSubmitHander = (event) => {
+    const onSubmitHandler = (event) => {
         // preventDefault()를 사용해서 버튼을 클릭했을 때 새로고침되지 않도록 한다.
         event.preventDefault()
 
         console.log("Email", Email)
         console.log("Password", Password)
+
+        let body = {
+            email: Email,
+            password: Password,
+        }
+        // dispatch를 사용, action이름은 loginUser, _action 폴더에 정의
+        dispatch(loginUser(body)).then((response) => {
+            // payload : server에서 status(200)과 함께 json 형식으로 넘어오는 데이터를 저장
+            if (response.payload.loginSuccess) {
+                console.log(response.payload)
+                props.history.push("/")
+            } else {
+                alert("Error")
+            }
+        })
+
+        // redux사용으로 인하여 _actions폴더로 이동
+        // Axios.post("/api/users/login", body).then((response) => {})
     }
     return (
         <div
@@ -31,17 +64,16 @@ const LoginPage = () => {
                 height: "100%",
             }}
         >
-            <form style={{ display: "flex", flexDirection: "column" }} onSubmit={onSubmitHander}>
+            <form style={{ display: "flex", flexDirection: "column" }} onSubmit={onSubmitHandler}>
                 <label>Email</label>
-                {/* 타이핑 할 때 onchange를 사용해서 stat를 변경 */}
-                <input type="email" value={Email} onChange={onEmailHander} />
+                <input type="email" value={Email} onChange={onEmailHandler} />
                 <label>Password</label>
-                <input type="password" value={Password} onChange={onPasswordHander} />
+                <input type="password" value={Password} onChange={onPasswordHandler} />
                 <br />
-                <button onChange={onSubmitHander}>Login</button>
+                <button type="submit">Login</button>
             </form>
         </div>
     )
 }
 
-export default LoginPage
+export default withRouter(LoginPage)

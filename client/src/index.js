@@ -18,7 +18,7 @@ ReactDOM.render(
         store={createStorewithMiddleare(
             Reducer,
             // chrome Redux Extension connect
-            window.__REDUX_DEVTOOLS_EXTESION__ && window.__REDUX_DEVTOOLS_EXTESION__()
+            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
         )}
     >
         <App />
