@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const mysql = require("mysql")
 const bcrypt = require("bcrypt")
 const saltRounds = 10
 const jwt = require("jsonwebtoken")
